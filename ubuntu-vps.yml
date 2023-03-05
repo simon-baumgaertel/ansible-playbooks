@@ -5,7 +5,7 @@
 
   tasks:
 
-  - name: update systee
+  - name: update system
     apt:
       update_cache: true
       upgrade: true
@@ -13,10 +13,15 @@
   - name: Create user mcadmin
     user:
       name: mcadmin
-      password: "{{ userpw }}"
       state: present
       groups: sudo
       shell: /bin/bash
+  
+  - name: add public ssh key
+    authorized_key:
+      user: mcadmin
+      state: present
+      key:"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPiWe4uSTrkA160qvHBYLjPoHw5PxZd0fOX8rDJ7vnw1 baumi@pop-os"
 
   - name: install packages
     package:
@@ -24,3 +29,32 @@
         - htop
         - tmux
         - openjdk-19-jdk-headless
+
+  - name: "ssh - disable Password Auth"
+    lineinfile:
+      dest=/etc/ssh/sshd_config
+      regexp='^PasswordAuthentication'
+      line="PasswordAuthentication no"
+      state=present
+      backup=yes
+
+  - name: "ssh - disable Root Login"
+    lineinfile:
+      dest=/etc/ssh/sshd_config
+      regexp='^PermitRootLogin'
+      line="PermitRootLogin no"
+      state=present
+      backup=yes
+    notify:
+      - restart ssh
+
+  - name: "success"
+    file:
+      path: "/root/ansible-worked"
+      state: touch
+
+  handlers:
+    - name: restart ssh
+      service:
+        name=sshd
+        state=restarted
