@@ -4,7 +4,6 @@
   become: true
 
   tasks:
-
   - name: update system
     apt:
       update_cache: true
@@ -13,15 +12,18 @@
   - name: Create user mcadmin
     user:
       name: mcadmin
-      state: present
+      password: "!"
       groups: sudo
+      append: yes
       shell: /bin/bash
-  
+      update_password: always
+      state: present
+
   - name: add public ssh key
     authorized_key:
       user: mcadmin
       state: present
-      key:"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPiWe4uSTrkA160qvHBYLjPoHw5PxZd0fOX8rDJ7vnw1 baumi@pop-os"
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPiWe4uSTrkA160qvHBYLjPoHw5PxZd0fOX8rDJ7vnw1 baumi@pop-os"
 
   - name: install packages
     package:
@@ -50,7 +52,7 @@
 
   - name: "success"
     file:
-      path: "/root/ansible-worked"
+      path: "/tmp/ansible-worked"
       state: touch
 
   handlers:
