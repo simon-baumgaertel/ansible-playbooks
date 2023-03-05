@@ -31,5 +31,5 @@
       state=present
       backup=yes
 
-  - name: "rebooting"
-      reboot:
+  - name: Reboot the machine
+    shell: "sleep 5 && reboot"
