@@ -1,0 +1,26 @@
+---
+- hosts: localhost
+  connection: local
+  become: true
+
+  tasks:
+
+  - name: update systee
+    apt:
+      update_cache: true
+      upgrade: true
+
+  - name: Create user mcadmin
+    user:
+      name: mcadmin
+      password: "{{ userpw }}"
+      state: present
+      groups: sudo
+      shell: /bin/bash
+
+  - name: install packages
+    package:
+      name:
+        - htop
+        - tmux
+        - openjdk-19-jdk-headless
