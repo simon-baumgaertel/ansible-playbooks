@@ -9,7 +9,7 @@
       update_cache: true
       upgrade: true
 
-  - name: install packages
+  - name: "install packages"
     package:
       name:
         - tmux
@@ -30,16 +30,6 @@
       line="PermitRootLogin no"
       state=present
       backup=yes
-    notify:
-      - restart ssh
 
-  - name: "success"
-    file:
-      path: "/root/ansible-worked"
-      state: touch
-
-  handlers:
-    - name: restart ssh
-      service:
-        name=sshd
-        state=restarted
+  - name: "rebooting"
+      reboot:
