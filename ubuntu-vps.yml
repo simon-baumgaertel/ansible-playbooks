@@ -9,26 +9,9 @@
       update_cache: true
       upgrade: true
 
-  - name: Create user mcadmin
-    user:
-      name: mcadmin
-      password: "!"
-      groups: sudo
-      append: yes
-      shell: /bin/bash
-      update_password: always
-      state: present
-
-  - name: add public ssh key
-    authorized_key:
-      user: mcadmin
-      state: present
-      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPiWe4uSTrkA160qvHBYLjPoHw5PxZd0fOX8rDJ7vnw1 baumi@pop-os"
-
   - name: install packages
     package:
       name:
-        - htop
         - tmux
         - openjdk-19-jdk-headless
 
@@ -52,7 +35,7 @@
 
   - name: "success"
     file:
-      path: "/tmp/ansible-worked"
+      path: "/root/ansible-worked"
       state: touch
 
   handlers:
